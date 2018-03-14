@@ -1,0 +1,81 @@
+<!--The content below is only a placeholder and can be replaced.-->
+
+<head>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div style="text-align:center">
+    <h1>
+      Welcome to the ToDoList!
+    </h1>
+  </div>
+
+  <div>
+    Username:
+    <input type="text" [(ngModel)]="username">
+    <!--<h1>{{username}}</h1>-->
+    <button id="newButton" (click)="showAddForm = !showAddForm;">new Item</button>
+    <button id="refreshList" (click)="refresh();">Refresh List</button>
+  </div>
+  <div *ngIf="showAddForm">
+    <form name="addForm">
+      <input type="textarea" name="newItemDescription " [(ngModel)]="itemDesc" placeholder="Description..." required>
+      <select name="newItemAssignTo" [(ngModel)]="taskAssignment">
+        <option value="Nobody">No User specified</option>
+        <option *ngFor="let person of people | async;">{{person.name}}</option>
+      </select>
+      <button [disabled]="!itemDesc" (click)="addTodoItem()">Send</button>
+    </form>
+
+  </div>
+  <div *ngIf="showEditForm">
+    <form name="editForm">
+      <input type="textarea" name="editItemDescription " [(ngModel)]="itemDesc" placeholder="Description...">
+      <select name="editItemAssignTo" [(ngModel)]="taskAssignment">
+        <option value="Nobody">No User specified</option>
+        <option *ngFor="let person of people | async; ">{{person.name}}</option>
+      </select>
+      <button (click)="editToDoItem()">Send</button>
+    </form>
+
+  </div>
+
+  <div>
+    <input type="checkbox" [(ngModel)]="mine" (change)="updateItems()">show Mine
+    <input type="checkbox" [(ngModel)]="undone" (change)="updateItems()">show undone
+  </div>
+  <!--<div>
+    <mat-table>
+  
+    </mat-table>
+  </div>-->
+
+  <div>
+    <table class="table">
+      <tr>
+        <td>User:</td>
+        <td>Description:</td>
+        <td>Done:</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr *ngFor="let item of items | async">
+        <td class="right">{{item.assignedTo}}</td>
+        <td class="right">{{item.description}}</td>
+        <td>
+          <input type="checkbox" [checked]="item.done" (change)="toggleDone(item.done, item.id)" />
+        </td>
+        <td>
+          <button (click)="toggleEditForm(item.id,item.description,item.assignedTo)">Edit</button>
+        </td>
+        <td>
+          <button (click)="deleteToDoItem(item.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <script src="bundle.js"></script>
+</body>
